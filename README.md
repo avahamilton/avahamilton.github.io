@@ -1,1 +1,0 @@
-# avahamilton.github.io
