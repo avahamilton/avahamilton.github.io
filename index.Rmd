@@ -14,7 +14,7 @@ output:
 
 # Lets add some links
 
-I often use [google](google.com) to do **data science**
+I often use [google](https://www.google.com/) to do **data science**
 
 # lets add an image
 
