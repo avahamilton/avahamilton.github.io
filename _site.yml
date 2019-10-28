@@ -3,6 +3,9 @@ output_dir: "."
 navbar:
   title: "Home"
   right:
+  
+    - text: "CURRICULUM VITAE"
+      href: CV.html
     - text: "About"
       href: about.html
     - icon: fa-envelope fa-lg
@@ -11,4 +14,4 @@ navbar:
       href: http://github.com/avahamilton/
 output:
   html_document:
-    theme: cerulean
+    theme: lux

@@ -1,12 +1,24 @@
 ---
-title: "My awesome website"
+title: "Ava Hamilton's Website"
 output: 
   html_document:
     toc: true
     toc_float: true
 ---
 
-# This is Jeff's awesome website
+# Ava Hamilton
+```{r}
+install.packages("plotly")
+library(plotly)
+
+
+```
+
+Ava Hamilton is a Data Analyst in the [Epidemiology] (https://www.mailman.columbia.edu/academics/departments/epidemiology) Department at Columbia University.
+
+
+
+
 
 
 You can learn about me [here](about.html)
