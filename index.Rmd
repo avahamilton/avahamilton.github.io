@@ -2,48 +2,45 @@
 title: "Ava Hamilton"
 output: 
   html_document:
-    css: bootstrap.css
     toc: true
     toc_float: true
 ---
 
 
-```{r}
+```{r setup, include=FALSE}
 library(plotly)
 library(dplyr)
 
 
 ```
 
-Ava Hamilton is a Data Analyst in the [Epidemiology] (https://www.mailman.columbia.edu/academics/departments/epidemiology) Department at Columbia University.
+Ava Hamilton is a Data Analyst in the [Epidemiology](https://www.mailman.columbia.edu/academics/departments/epidemiology) Department at Columbia University.
 
-Ava Hamilton
-Senior Data Analyst
-Department of Epidemiology
-Columbia University
-Mailman School of Public Health
-722 West 168th Street
-New York, NY 10032
+
+####
+####
+
+##### Senior Data Analyst
+##### Department of Epidemiology
+##### Columbia University
+##### Mailman School of Public Health
+##### 722 West 168th Street
+##### New York, NY 10032
  
 
+##
+##
+##
+##
 
 
+You can learn about me [here](about.html).
 
+####
+####
 
+### Here is my cat Pippa:
 
-You can learn about me [here](about.html)
-
-![](https://media.giphy.com/media/drXGoW1iudhKw/giphy.gif)
-
-
-# Lets add some links
-
-I often use [google](https://www.google.com/) to do **data science**
-
-# lets add an image
-
-here is my cat:
-
-![](zformula.jpeg)
+![](pippa_and_maya.jpg)
 
 

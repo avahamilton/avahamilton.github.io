@@ -15,4 +15,4 @@ navbar:
 output:
   html_document:
   #css: 'bootstrap.css'
-   # theme: journal
+   theme: cosmo
