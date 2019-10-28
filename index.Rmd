@@ -8,8 +8,8 @@ output:
 
 # Ava Hamilton
 ```{r}
-install.packages("plotly")
 library(plotly)
+library(dplyr)
 
 
 ```

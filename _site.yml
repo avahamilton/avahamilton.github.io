@@ -14,4 +14,4 @@ navbar:
       href: http://github.com/avahamilton/
 output:
   html_document:
-    theme: lux
+    theme: cerulean
