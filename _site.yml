@@ -6,13 +6,10 @@ navbar:
   
     - text: "CURRICULUM VITAE"
       href: CV.html
-    - text: "About"
-      href: about.html
     - icon: fa-envelope fa-lg
-      href: mailto:<ava.d.hamilton@gmail.com>
+      href: mailto:<ah3108@columbia.edu>
     - icon: fa-github fa-lg
       href: http://github.com/avahamilton/
 output:
   html_document:
-  #css: 'bootstrap.css'
-   theme: cosmo
+   theme: flatly

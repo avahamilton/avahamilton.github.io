@@ -2,7 +2,7 @@
 title: "Ava Hamilton"
 output: 
   html_document:
-    toc: true
+    toc: FALSE
     toc_float: true
 ---
 
@@ -28,10 +28,10 @@ Ava Hamilton is a Data Analyst in the [Epidemiology](https://www.mailman.columbi
 ##### New York, NY 10032
  
 
-##
-##
-##
-##
+####
+####
+####
+####
 
 
 You can learn about me [here](about.html).

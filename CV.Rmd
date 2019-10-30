@@ -2,7 +2,6 @@
 title: "CURRICULUM VITAE"
 output: 
   html_document:
-   # css: bootstrap.css
     toc: true
     toc_float: true
 ---
