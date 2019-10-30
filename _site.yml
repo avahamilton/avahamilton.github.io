@@ -6,6 +6,8 @@ navbar:
   
     - text: "CURRICULUM VITAE"
       href: CV.html
+    - text: "DASHBOARD"
+      href: plotly.html
     - icon: fa-envelope fa-lg
       href: mailto:<ah3108@columbia.edu>
     - icon: fa-github fa-lg

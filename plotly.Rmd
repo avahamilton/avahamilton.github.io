@@ -1,0 +1,36 @@
+---
+title: "DASHBOARD"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+```{r}
+
+library(tidyverse)
+library(viridis)
+library(p8105.datasets)
+library(plotly)
+```
+
+
+
+## Plotly examples
+
+
+```{r}
+data("instacart")
+
+instacart2 = 
+  instacart %>% 
+  janitor::clean_names() %>% 
+  mutate(
+    department = as.factor(department)
+  ) %>% 
+  filter(department == "beverages")
+
+
+```
+
+
