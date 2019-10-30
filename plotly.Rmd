@@ -28,8 +28,28 @@ instacart2 =
   mutate(
     department = as.factor(department)
   ) %>% 
-  filter(department == "beverages")
+  filter(department == "beverages" & reordered == 1) %>% 
+  select(-order_id, -eval_set)
 
+
+instacart2 %>% 
+  plot_ly(
+    x = ~order_hour_of_day, y = ~days_since_prior_order, type = "scatter", mode = "markers",
+    color = ~order_dow, text = ~product_name, alpha = 0.5
+  )
+
+
+```
+
+
+```{r}
+
+instacart2 %>% 
+  mutate(
+    product_name = as.factor(product_name),
+    product_name = fct_reorder(product_name, days_since_prior_order)
+  ) %>% 
+  plot_ly(y = ~days_since_prior_order, color = ~product_name, type = "box")
 
 ```
 
