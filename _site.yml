@@ -6,6 +6,8 @@ navbar:
   
     - text: "CURRICULUM VITAE"
       href: CV.html
+    - text: "PLOTLY"
+      href: plotly.html
     - text: "DASHBOARD"
       href: instacart_dashboard.html
     - icon: fa-envelope fa-lg

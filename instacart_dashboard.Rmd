@@ -35,6 +35,7 @@ Column {data-width=550}
 
 ```{r}
 
+
 top_dept =  instacart %>% 
   add_count(product_id, sort = TRUE, name = "prod_count_ordered") %>% 
   group_by(department_id) %>% 
@@ -44,19 +45,26 @@ top_dept =  instacart %>%
   filter(max_item_ordered == prod_count_ordered) %>% 
   ungroup() %>% 
   group_by(department_id, order_hour_of_day) %>% 
-  add_count(product_id, sort = TRUE, name = "count_time_order") %>% 
+  add_count(product_id, sort = TRUE, name = "count_time_product") %>% 
   mutate(
-    percent_time_order = count_time_order/prod_count_ordered
+    percent_time_order = count_time_product/prod_count_ordered
   ) %>% 
-  ggplot(aes(x = order_hour_of_day, y = count_time_order, color = department )) +
+  ungroup() %>% 
+  select(-aisle_id, -aisle, -add_to_cart_order, -reordered) %>% 
+  group_by(department)
+
+fig_top = 
+  top_dept %>% ggplot(aes(x = order_hour_of_day, y = count_time_product, color = department, text = paste0(department, product_name))) +
   geom_point() + 
   geom_line() +
-  labs(title = "Number of most popular item in each department ordered per hour",
+  labs(title = "Number of the most popular item in each department ordered per hour",
        x = "Hour of Day",
-       y = "Number ordered")
+       y = "Number of product ordered")
 
+  ggplotly(fig_top,tooltip = "text") 
+  
+  
 
-ggplotly(top_dept)
 ```
 
 Column {data-width=550}
@@ -96,10 +104,10 @@ perc_produced = instacart %>%
 
 plot_ly(perc_produced, y = ~percent_produce, color = ~order_group, type = "box", colors = "Set2") %>% 
   layout(
-    title = "Distribution of percent produce of carts by size or order",
+    title = "Distribution of % Produce in carts, by size of order",
     xaxis = list(title = 'Number of items in order',
                  zeroline = TRUE),
-    yaxis = list(title = 'Percent of order made up of produce',
+    yaxis = list(title = 'Percent of order that is produce',
                  zeroline = TRUE)
   )
 ```
