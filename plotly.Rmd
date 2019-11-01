@@ -6,7 +6,7 @@ output:
     toc_float: true
 ---
 
-```{r}
+```{r echo = FALSE}
 
 library(tidyverse)
 library(viridis)
@@ -22,34 +22,243 @@ library(plotly)
 ```{r}
 data("instacart")
 
-instacart2 = 
-  instacart %>% 
+instacart = instacart %>% 
   janitor::clean_names() %>% 
   mutate(
     department = as.factor(department)
   ) %>% 
-  filter(department == "beverages" & reordered == 1) %>% 
-  select(-order_id, -eval_set)
+  select(-user_id, -eval_set ) %>% 
+  ungroup()
 
 
-instacart2 %>% 
-  plot_ly(
-    x = ~order_hour_of_day, y = ~days_since_prior_order, type = "scatter", mode = "markers",
-    color = ~order_dow, text = ~product_name, alpha = 0.5
-  )
+```
 
+
+
+
+# figure 1
+```{r}
+
+top_dept =  instacart %>% 
+  add_count(product_id, sort = TRUE, name = "prod_count_ordered") %>% 
+  group_by(department_id) %>% 
+  mutate(
+    max_item_ordered = max(prod_count_ordered)
+  ) %>% 
+  filter(max_item_ordered == prod_count_ordered) %>% 
+  ungroup() %>% 
+  group_by(department_id, order_hour_of_day) %>% 
+  add_count(product_id, sort = TRUE, name = "count_time_order") %>% 
+  mutate(
+    percent_time_order = count_time_order/prod_count_ordered
+  ) %>% 
+  ggplot(aes(x = order_hour_of_day, y = count_time_order, color = department )) +
+  geom_point() + 
+  geom_line() +
+  labs(title = "Number of most popular item in each department ordered per hour",
+       x = "Hour of Day",
+       y = "Number ordered")
+
+top_dept
+#ggplotly(top_dept)
+
+# need to add product name and rate as well
+
+
+```
+
+
+# figure 2
+
+```{r}
+
+#for carts with under 5 10 20 items, what are the top 5 products
+
+#1 cart 
+
+set1 = instacart %>% 
+  group_by(order_id) %>% 
+  mutate(
+    num_items_ordered = max(add_to_cart_order)
+  ) %>% 
+  ungroup() %>% 
+  filter(num_items_ordered == 1) %>% 
+  group_by(product_id) %>% 
+  add_count(product_id, sort = TRUE, name = "sum_item_ordered") %>% 
+  ungroup() %>% 
+  distinct(product_name, sum_item_ordered) %>% 
+  arrange(-sum_item_ordered) %>% 
+  slice(1:10)
+
+total1 = instacart %>% 
+  group_by(order_id) %>% 
+  mutate(
+    num_items_ordered = max(add_to_cart_order)
+  ) %>% 
+  ungroup() %>% 
+  filter(num_items_ordered == 1) %>% 
+  group_by(product_id) %>% 
+  add_count(product_id, sort = TRUE, name = "sum_item_ordered")
+
+left_join(set1, total1, by = c("product_name", "sum_item_ordered")) %>% 
+  ggplot(aes( x = product_name, y = order_hour_of_day, color = department)) +
+  geom_density()
+
+
+#5 cart
+set5 = instacart %>% 
+  group_by(order_id) %>% 
+  mutate(
+    num_items_ordered = max(add_to_cart_order)
+  ) %>% 
+  ungroup() %>% 
+  filter(num_items_ordered <= 5) %>% 
+  group_by(product_id) %>% 
+  add_count(product_id, sort = TRUE, name = "sum_item_ordered") %>% 
+  ungroup() %>% 
+  distinct(product_name, sum_item_ordered) %>% 
+  arrange(-sum_item_ordered) %>% 
+  slice(1:10)
+
+total5 = instacart %>% 
+  group_by(order_id) %>% 
+  mutate(
+    num_items_ordered = max(add_to_cart_order)
+  ) %>% 
+  ungroup() %>% 
+  filter(num_items_ordered <= 5) %>% 
+  group_by(product_id) %>% 
+  add_count(product_id, sort = TRUE, name = "sum_item_ordered")
+
+left_join(set5, total5, by = c("product_name", "sum_item_ordered")) %>% 
+  ggplot(aes( x = product_name, y = order_hour_of_day, color = department)) +
+  geom_boxplot()
+
+## 5-20 cart
+
+
+set620 = instacart %>% 
+  group_by(order_id) %>% 
+  mutate(
+    num_items_ordered = max(add_to_cart_order)
+  ) %>% 
+  ungroup() %>% 
+  filter(num_items_ordered > 5 & num_items_ordered <= 20) %>% 
+  group_by(product_id) %>% 
+  add_count(product_id, sort = TRUE, name = "sum_item_ordered") %>% 
+  ungroup() %>% 
+  distinct(product_name, sum_item_ordered) %>% 
+  arrange(-sum_item_ordered) %>% 
+  slice(1:10)
+
+total620 = instacart %>% 
+  group_by(order_id) %>% 
+  mutate(
+    num_items_ordered = max(add_to_cart_order)
+  ) %>% 
+  ungroup() %>% 
+  filter(num_items_ordered > 5 & num_items_ordered <= 20) %>% 
+  group_by(product_id) %>% 
+  add_count(product_id, sort = TRUE, name = "sum_item_ordered")
+
+left_join(set620, total620, by = c("product_name", "sum_item_ordered")) %>% 
+  ggplot(aes( x = product_name, y = order_hour_of_day, color = department)) +
+  geom_boxplot()
+
+
+
+#20+ cart
+set20p = instacart %>% 
+  group_by(order_id) %>% 
+  mutate(
+    num_items_ordered = max(add_to_cart_order)
+  ) %>% 
+  ungroup() %>% 
+  filter(num_items_ordered > 20) %>% 
+  group_by(product_id) %>% 
+  add_count(product_id, sort = TRUE, name = "sum_item_ordered") %>% 
+  ungroup() %>% 
+  distinct(product_name, sum_item_ordered) %>% 
+  arrange(-sum_item_ordered) %>% 
+  slice(1:10)
+
+total20p = instacart %>% 
+  group_by(order_id) %>% 
+  mutate(
+    num_items_ordered = max(add_to_cart_order)
+  ) %>% 
+  ungroup() %>% 
+  filter(num_items_ordered > 20) %>% 
+  group_by(product_id) %>% 
+  add_count(product_id, sort = TRUE, name = "sum_item_ordered")
+
+left_join(set20p, total20p, by = c("product_name", "sum_item_ordered")) %>% 
+  ggplot(aes( x = product_name, y = order_hour_of_day, color = department)) +
+  geom_boxplot()
+
+
+
+
+
+```
+
+
+
+```{r}
+
+
+
+instacart %>% 
+  group_by(order_id) %>% 
+  mutate(
+    num_items_ordered = max(add_to_cart_order)
+  ) %>% 
+  ungroup() %>% 
+  filter(num_items_ordered == 1) %>% 
+  group_by(department_id) %>% 
+  add_count(department_id, sort = TRUE, name = "sum_dept_ordered") %>% 
+  ungroup() %>% 
+  distinct(department, sum_dept_ordered) %>% 
+  mutate(
+    department = fct_reorder(department, sum_dept_ordered)
+  ) %>% 
+  arrange(sum_dept_ordered) %>% 
+  ggplot(aes(x = department, y = sum_dept_ordered, fill = department)) +
+  geom_bar(stat = "identity")
 
 ```
 
 
 ```{r}
 
-instacart2 %>% 
+## how does number of items ordered effect % of produce
+
+perc_produced = instacart %>% 
+  select(-aisle_id, -aisle, -department_id) %>% 
+  group_by(order_id) %>% 
   mutate(
-    product_name = as.factor(product_name),
-    product_name = fct_reorder(product_name, days_since_prior_order)
-  ) %>% 
-  plot_ly(y = ~days_since_prior_order, color = ~product_name, type = "box")
+    num_items_ordered = max(add_to_cart_order)
+  ) %>%   
+  add_count(department, name = "dept_count_ordered") %>% 
+  ungroup() %>% 
+  filter(department == "produce") %>% 
+  distinct(order_id, num_items_ordered, dept_count_ordered,order_dow) %>% 
+  rename(num_produce = dept_count_ordered) %>% 
+  mutate(
+    percent_produce = 100*num_produce/num_items_ordered,
+     order_group = case_when(
+      num_items_ordered == 2 ~ "2 items",
+      between(num_items_ordered, 2, 5) ~ "2-5",
+      between(num_items_ordered, 5, 10) ~ "5-10",
+      between(num_items_ordered, 10, 20) ~ "10-20",
+      num_items_ordered > 20 ~ "20+"
+    ),
+  )
+
+
+  ggplot(perc_produced, aes(x = order_dow, y = percent_produce, color = order_dow)) +
+  geom_boxplot(aes(color = order_dow))
+
 
 ```
 
