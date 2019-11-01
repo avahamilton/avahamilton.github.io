@@ -54,7 +54,7 @@ top_dept =  instacart %>%
   group_by(department)
 
 fig_top = 
-  top_dept %>% ggplot(aes(x = order_hour_of_day, y = count_time_product, color = department, text = paste0(department, product_name))) +
+  top_dept %>% ggplot(aes(x = order_hour_of_day, y = count_time_product, color = department, text = paste0("Product: ", product_name))) +
   geom_point() + 
   geom_line() +
   labs(title = "Number of the most popular item in each department ordered per hour",

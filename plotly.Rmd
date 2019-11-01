@@ -1,5 +1,5 @@
 ---
-title: "DASHBOARD"
+title: "PLOTLY code"
 output: 
   html_document:
     toc: true
@@ -16,9 +16,6 @@ library(plotly)
 
 ```
 
-
-
-## Plotly 
 
 ```{r}
 data("instacart")
