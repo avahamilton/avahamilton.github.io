@@ -1,0 +1,140 @@
+---
+title: "Instacart dashboard"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(tidyverse)
+library(viridis)
+library(p8105.datasets)
+library(plotly)
+
+data("instacart")
+
+instacart = instacart %>% 
+  janitor::clean_names() %>% 
+  mutate(
+    department = as.factor(department)
+  ) %>% 
+  select(-user_id, -eval_set ) %>% 
+  ungroup()
+
+
+
+
+```
+
+Column {data-width=550}
+-----------------------------------------------------------------------
+
+### Chart A
+
+```{r}
+
+top_dept =  instacart %>% 
+  add_count(product_id, sort = TRUE, name = "prod_count_ordered") %>% 
+  group_by(department_id) %>% 
+  mutate(
+    max_item_ordered = max(prod_count_ordered)
+  ) %>% 
+  filter(max_item_ordered == prod_count_ordered) %>% 
+  ungroup() %>% 
+  group_by(department_id, order_hour_of_day) %>% 
+  add_count(product_id, sort = TRUE, name = "count_time_order") %>% 
+  mutate(
+    percent_time_order = count_time_order/prod_count_ordered
+  ) %>% 
+  ggplot(aes(x = order_hour_of_day, y = count_time_order, color = department )) +
+  geom_point() + 
+  geom_line() +
+  labs(title = "Number of most popular item in each department ordered per hour",
+       x = "Hour of Day",
+       y = "Number ordered")
+
+
+ggplotly(top_dept)
+```
+
+Column {data-width=550}
+-----------------------------------------------------------------------
+
+### Chart B
+
+```{r}
+
+perc_produced = instacart %>% 
+  select(-aisle_id, -aisle, -department_id) %>% 
+  group_by(order_id) %>% 
+  mutate(
+    num_items_ordered = max(add_to_cart_order)
+  ) %>%   
+  add_count(department, name = "dept_count_ordered") %>% 
+  ungroup() %>% 
+  filter(department == "produce") %>% 
+  distinct(order_id, num_items_ordered, dept_count_ordered,order_dow) %>% 
+  rename(num_produce = dept_count_ordered) %>% 
+  mutate(
+    order_dow = as.factor(order_dow),
+    percent_produce = 100*num_produce/num_items_ordered,
+    ratio_produce = num_produce/(num_items_ordered - num_produce),
+    order_group = case_when(
+      num_items_ordered == 2 ~ "2 items",
+      between(num_items_ordered, 2, 5) ~ "2-5",
+      between(num_items_ordered, 5, 10) ~ "5-10",
+      between(num_items_ordered, 10, 20) ~ "10-20",
+      between(num_items_ordered, 20, 50) ~ "20-50",
+      num_items_ordered > 50 ~ "50+"
+    ),
+    order_group = fct_relevel(order_group, "2 items", "2-5", "5-10", "10-20", "20-50", "50+")
+  ) %>% 
+  filter(order_group != "NA")
+
+
+plot_ly(perc_produced, y = ~percent_produce, color = ~order_group, type = "box", colors = "Set2") %>% 
+  layout(
+    title = "Distribution of percent produce of carts by size or order",
+    xaxis = list(title = 'Number of items in order',
+                 zeroline = TRUE),
+    yaxis = list(title = 'Percent of order made up of produce',
+                 zeroline = TRUE)
+  )
+```
+
+### Chart C
+
+```{r}
+
+
+
+
+barfig = instacart %>% 
+  group_by(order_id) %>% 
+  mutate(
+    num_items_ordered = max(add_to_cart_order)
+  ) %>% 
+  ungroup() %>% 
+  filter(num_items_ordered == 1) %>% 
+  group_by(department_id) %>% 
+  add_count(department_id, sort = TRUE, name = "sum_dept_ordered") %>% 
+  ungroup() %>% 
+  distinct(department, sum_dept_ordered) %>% 
+  mutate(
+    department = fct_reorder(department, sum_dept_ordered)
+  )
+
+plot_ly(barfig, x = ~department, y = ~sum_dept_ordered, color = ~department, type = "bar", colors = "Set1") %>% 
+  layout(
+    title = 'Number of Department orders with 1 item',
+    xaxis = list(title = 'Department',
+                 zeroline = TRUE),
+    yaxis = list(title = 'Number of orders from department',
+                 zeroline = TRUE)
+  )
+
+
+```
+
