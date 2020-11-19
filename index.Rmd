@@ -34,13 +34,7 @@ Ava Hamilton is a Data Analyst in the [Epidemiology](https://www.mailman.columbi
 ####
 
 
-You can learn about me [here](CV.html).
+[CURRICULUM VITAE](CV.html).
 
 ####
 ####
-
-### Here is my cat Pippa:
-
-![](pippa_and_maya.jpg)
-
-
