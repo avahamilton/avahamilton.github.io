@@ -14,14 +14,12 @@ library(dplyr)
 
 ```
 
-Ava Hamilton is a Data Analyst in the [Epidemiology](https://www.mailman.columbia.edu/academics/departments/epidemiology) Department at Columbia University.
-
 
 ####
 ####
 
 ##### Senior Data Analyst
-##### Department of Epidemiology
+##### Department of [Epidemiology](https://www.mailman.columbia.edu/academics/departments/epidemiology)
 ##### Columbia University
 ##### Mailman School of Public Health
 ##### 722 West 168th Street
@@ -34,7 +32,7 @@ Ava Hamilton is a Data Analyst in the [Epidemiology](https://www.mailman.columbi
 ####
 
 
-[CURRICULUM VITAE](CV.html).
+[CURRICULUM VITAE](CV.html)
 
 ####
 ####
